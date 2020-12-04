@@ -29,8 +29,8 @@ class DatabaseManager:
                                                 Phone_Num VARCHAR(255),
                                                 Type VARCHAR(255),
                                                 Status VARCHAR(255),
+                                                Employee_ID INT,
                                                 Dept_ID INT, 
-
                                                 FOREIGN KEY(Dept_ID) REFERENCES Department(Dept_ID))'''
 
                 create_payroll_table = '''CREATE TABLE Payroll(
