@@ -9,46 +9,42 @@ class DatabaseManager:
 
         try: #probe for db
             print('establishing connection to database')
-            self.conn = sqlite3.connect(('file:' + self.db_name + '?mode=rw'))
+            self.conn = sqlite3.connect(self.db_name)
             print('getting cursor')
             self.cursor = self.conn.cursor()
-        except: # if no db, create it
-            try: #create db
-                self.conn = sqlite3.connect(self.db_name)
-                self.cursor = self.conn.cursor()
 
-                create_department_table = '''CREATE TABLE Department(
-                                                Name VARCHAR(255), 
-                                                Location VARCHAR(255))'''
+            create_department_table = '''CREATE TABLE IF NOT EXISTS Department(
+                                            Name VARCHAR(255), 
+                                            Location VARCHAR(255))'''
 
-                create_employee_table = '''CREATE TABLE Employee(
-                                                First_Name VARCHAR(255) NOT NULL, 
-                                                Last_Name VARCHAR(255), 
-                                                Date_of_Birth DATE NOT NULL,
-                                                Email VARCHAR(255),
-                                                Phone_Num VARCHAR(255),
-                                                Type VARCHAR(255),
-                                                Status VARCHAR(255),
-                                                Employee_ID INT,
-                                                Dept_ID INT, 
-                                                FOREIGN KEY(Dept_ID) REFERENCES Department(Dept_ID))'''
+            create_employee_table = '''CREATE TABLE IF NOT EXISTS Employee(
+                                            First_Name VARCHAR(255) NOT NULL, 
+                                            Last_Name VARCHAR(255), 
+                                            Date_of_Birth DATE NOT NULL,
+                                            Email VARCHAR(255),
+                                            Phone_Num VARCHAR(255),
+                                            Type VARCHAR(255),
+                                            Status VARCHAR(255),
+                                            Employee_ID INT,
+                                            Dept_ID INT, 
+                                            FOREIGN KEY(Dept_ID) REFERENCES Department(Dept_ID))'''
 
-                create_payroll_table = '''CREATE TABLE Payroll(
-                                                Type VARCHAR(255),
-                                                Pay DECIMAL(10,2), 
-                                                Employee_ID INT, 
+            create_payroll_table = '''CREATE TABLE IF NOT EXISTS Payroll(
+                                            Type VARCHAR(255),
+                                            Pay DECIMAL(10,2), 
+                                            Employee_ID INT, 
 
-                                                FOREIGN KEY(Employee_ID) REFERENCES Employee(Employee_ID))'''
-                
-                print('creating department')
-                self.cursor.execute(create_department_table)
-                print('creating employee')
-                self.cursor.execute(create_employee_table)
-                print('creating payroll')
-                self.cursor.execute(create_payroll_table)
+                                            FOREIGN KEY(Employee_ID) REFERENCES Employee(Employee_ID))'''
+            
+            print('creating department')
+            self.cursor.execute(create_department_table)
+            print('creating employee')
+            self.cursor.execute(create_employee_table)
+            print('creating payroll')
+            self.cursor.execute(create_payroll_table)
 
-            except: #handle errors
-                print('There was an error creating the tables')
+        except: #handle errors
+            print('There was an error creating the tables')
 
     #--------------------- Department operations-------------------------------------------------
 
@@ -81,7 +77,8 @@ class DatabaseManager:
                                             Phone_Num,
                                             Type,
                                             Status)
-                                VALUES({0},{1},{2},{3},{4},{5},{6})'''.format(firstName, lastName, dob, email, phoneNum, Type, status)
+                                VALUES("{0}","{1}",{2},"{3}","{4}","{5}","{6}")'''.format(firstName, lastName, dob, email, phoneNum, Type, status)
+        print(insert_employee)
         self.cursor.execute(insert_employee)
         #except:
             #print("ERROR: TABLE DOES NOT EXIST OR VALUES WERE FORMATTED INCORRECTLY\n")
