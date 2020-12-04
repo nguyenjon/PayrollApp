@@ -18,7 +18,7 @@ def add_employee():
 def edit_employee():
     while True:
         emp_id = input("Enter the ID of the employee: ")
-        if id.isnumeric():
+        if emp_id.isnumeric():
             break
         else:
             print('Invalid ID')
@@ -28,7 +28,7 @@ def edit_employee():
 def delete_employee():
     while True:
         emp_id = input("Enter the ID of the employee: ")
-        if id.isnumeric():
+        if emp_id.isnumeric():
             break
         else:
             print('Invalid ID')
