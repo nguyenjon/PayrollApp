@@ -11,9 +11,9 @@ class DatabaseManager:
             self.conn = sqlite3.connect(self.db_name + '?mode=rw')
             self.cursor = conn.cursor()
         except: # if no db, create it
-            try: #create db
+            # try: #create db
                 self.conn = sqlite3.connect(self.db_name)
-                self.cursor = conn.cursor()
+                self.cursor = self.conn.cursor()
 
                 create_department_table = '''CREATE TABLE Department(
                                                 Name VARCHAR(255), 
@@ -25,7 +25,6 @@ class DatabaseManager:
                                                 Date_of_Birth DATE NOT NULL,
                                                 Email VARCHAR(255),
                                                 Phone_Num VARCHAR(255),
-                                                Dept_ID VARCHAR(255), 
                                                 Type VARCHAR(255),
                                                 Status VARCHAR(255),
                                                 Dept_ID INT, 
@@ -38,13 +37,16 @@ class DatabaseManager:
                                                 Employee_ID INT, 
 
                                                 FOREIGN KEY(Employee_ID) REFERENCES Employee(Employee_ID))'''
+                
+                print('creating department')
+                self.cursor.execute(create_department_table)
+                print('creating employee')
+                self.cursor.execute(create_employee_table)
+                print('creating payroll')
+                self.cursor.execute(create_payroll_table)
 
-                cursor.execute(create_department_table)
-                cursor.execute(create_employee_table)
-                cursor.execute(create_payroll_table)
-
-            except: #handle errors
-                print('There was an error creating the tables')
+            # except: #handle errors
+            #     print('There was an error creating the tables')
         
     #--------------------- Department operations-------------------------------------------------
 
