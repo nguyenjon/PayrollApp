@@ -14,10 +14,12 @@ class DatabaseManager:
             self.cursor = self.conn.cursor()
 
             create_department_table = '''CREATE TABLE IF NOT EXISTS Department(
+                                            Dept_ID INT PRIMARY KEY UNIQUE NOT NULL,
                                             Name VARCHAR(255), 
                                             Location VARCHAR(255))'''
 
             create_employee_table = '''CREATE TABLE IF NOT EXISTS Employee(
+                                            Employee_ID INT PRIMARY KEY UNIQUE NOT NULL,
                                             First_Name VARCHAR(255) NOT NULL, 
                                             Last_Name VARCHAR(255), 
                                             Date_of_Birth DATE NOT NULL,
@@ -25,15 +27,16 @@ class DatabaseManager:
                                             Phone_Num VARCHAR(255),
                                             Type VARCHAR(255),
                                             Status VARCHAR(255),
-                                            Employee_ID INT,
                                             Dept_ID INT, 
+                                            
                                             FOREIGN KEY(Dept_ID) REFERENCES Department(Dept_ID))'''
 
             create_payroll_table = '''CREATE TABLE IF NOT EXISTS Payroll(
+                                            Payroll_ID INT PRIMARY KEY UNIQUE NOT NULL,
                                             Type VARCHAR(255),
                                             Pay DECIMAL(10,2), 
                                             Employee_ID INT, 
-
+                                            
                                             FOREIGN KEY(Employee_ID) REFERENCES Employee(Employee_ID))'''
             
             print('creating department')
@@ -62,6 +65,7 @@ class DatabaseManager:
     #--------------------- Employee operations-------------------------------------------------
 
     def insertEmployee(self):
+        emp_ID = input('Enter the ID of the employee: ')
         firstName = input("Enter the first name of the employee: ")
         lastName = input("Enter the last name of the employee: ")
         dob = input("Enter the date of birth of the employee in the format of YYYY-MM-DD(dashes included): ")
@@ -70,20 +74,20 @@ class DatabaseManager:
         Type = input("Enter the employee type(employee, contractor): ")
         status = input("Enter the status of the employee: ")
         #try:
-        insert_employee = '''INSERT INTO Employee(First_Name, 
+        insert_employee = '''INSERT INTO Employee(Employee_ID,
+                                            First_Name, 
                                             Last_Name, 
                                             Date_of_Birth,
                                             Email,
                                             Phone_Num,
                                             Type,
                                             Status)
-                                VALUES("{0}","{1}",{2},"{3}","{4}","{5}","{6}")'''.format(firstName, lastName, dob, email, phoneNum, Type, status)
-        print(insert_employee)
+                                VALUES({0}, "{1}","{2}",{3},"{4}","{5}","{6}","{7}")'''.format(emp_ID, firstName, lastName, dob, email, phoneNum, Type, status)
         self.cursor.execute(insert_employee)
         #except:
             #print("ERROR: TABLE DOES NOT EXIST OR VALUES WERE FORMATTED INCORRECTLY\n")
 
-    def updateEmployee(self, empID):
+    def updateEmployee(self, empID):        
         print("1: Update name\n")
         print("2: Update email\n")
         print("3: Update phone number\n")
@@ -148,10 +152,10 @@ class DatabaseManager:
 
     #--------------------- Payroll operations-------------------------------------------------
 
-    def add_payroll(self, pay_type, pay, emp_ID):
+    def add_payroll(self, payroll_id, pay_type, pay, emp_ID):
         try:
-            add = '''INSERT INTO Payroll(Type, Pay, Employee_ID)
-                        VALUES({0} , {1}, {2})'''.format(pay_type, pay, emp_ID)
+            add = '''INSERT INTO Payroll(Payroll_ID, Type, Pay, Employee_ID)
+                        VALUES({0} , "{1}", {2}, {3})'''.format(payroll_id, pay_type, pay, emp_ID)
             self.cursor.execute(add)
         except:
             print('There was an error adding the payroll')
