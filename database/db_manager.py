@@ -65,7 +65,7 @@ class DatabaseManager:
 
     #--------------------- Employee operations-------------------------------------------------
 
-    def insertEmployee(empID, deptID):
+    def insertEmployee(self):
         firstName = input("Enter the first name of the employee: ")
         lastName = input("Enter the last name of the employee: ")
         dob = input("Enter the date of birth of the employee in the format of YYYY-MM-DD(dashes included): ")
@@ -74,12 +74,19 @@ class DatabaseManager:
         Type = input("Enter the employee type(Manager, HR, CEO, etc.): ")
         status = input("Enter the status of the employee: ")
         try:
-            insert_employee = '''INSERT INTO Employee VALUES({0},{1},{2},{3},{4},{5},{6},{7},{8},)'''.format(firstName, lastname, dob, email, phoneNum, Type, status, empID, deptID)
+            insert_employee = '''INSERT INTO Employee(First_Name, 
+                                                Last_Name, 
+                                                Date_of_Birth,
+                                                Email,
+                                                Phone_Num,
+                                                Type,
+                                                Status)
+                                 VALUES({0},{1},{2},{3},{4},{5},{6},{7},{8},)'''.format(firstName, lastName, dob, email, phoneNum, Type, status)
             cursor.execute(insert_employee)
         except:
             print("ERROR: TABLE DOES NOT EXIST OR VALUES WERE FORMATTED INCORRECTLY\n")
 
-    def updateEmployee(empID):
+    def updateEmployee(self, empID):
         print("1: Update employee ID\n")
         print("2: Update name\n")
         print("3: Update email\n")
@@ -142,7 +149,7 @@ class DatabaseManager:
         else:
             print("ERROR: OPTION NOT AVAILABLE\n")
         
-    def deleteEmployee(empID):
+    def deleteEmployee(self, empID):
         try:
             delete_employee = '''DELETE FROM Employee WHERE Employee_ID={}'''.format(empID)
             cursor.execute(delete_employee)
@@ -160,6 +167,16 @@ class DatabaseManager:
         except:
             print('There was an error adding the payroll')
 
+
+    def view_payroll(self, emp_ID):
+        try:
+            view = '''SELECT pay_type, pay FROM Payroll
+                        WHERE Employee_ID = {0}'''.format(emp_ID)
+            cursor.execute(view)
+        except:
+            print('ERROR: EMPLOYEE WITH THE ID {} DOES NOT HAVE A PAYROLL\n'.format(emp_ID))
+
+
     def edit_payroll(self, pay_type, pay, emp_ID):
         try:
             edit = '''UPDATE Payroll
@@ -170,15 +187,16 @@ class DatabaseManager:
         except:
             print('There was an error editing the payroll')
 
+
     def delete_payroll(self, emp_ID):
         try:
-            delete = '''DEELETE from Payroll
-                            WHERE Employee_ID = '{0}\''''.format(emp_ID)
+            delete = '''DELETE FROM Payroll 
+                        WHERE Employee_ID={}'''.format(emp_ID)
             cursor.execute(delete)
         except:
-            print('There was an error adding the payroll')
+           print("ERROR: EMPLOYEE WITH THE ID {} DOES NOT HAVE A PAYROLL\n".format(emp_ID))
 
-
+    #--------------------- Payroll-Employee operations-------------------------------------------------
 
 
 

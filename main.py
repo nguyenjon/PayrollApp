@@ -4,7 +4,11 @@
 #CSCE 4350.070
 #December 3, 2020
 
+import re
+
 from database.db_manager import DatabaseManager
+
+db = DatabaseManager()
 
 #--------------------- Department operations-------------------------------------------------
 
@@ -34,31 +38,75 @@ def delete_employee():
 #--------------------- Payroll operations-------------------------------------------------
 
 def add_payroll():
-    pass
-    x = input('Please enter a pay type: 1(hourly), 2(salary)')
-    choice = int(x)
+    while True:
+        id = input("Enter the ID of the employee: ")
+        if id.isnumeric():
+            break
+        else:
+            print('Invalid ID')
+
+    while True:
+        pay_type = input("Enter the type of pay (Hourly, Salary): ")
+        if pay_type in ['Hourly', 'Salary']:
+            break
+        else:
+            print('Invalid Option')
+    
+    r = re.compile('[1-9][0-9]*.[0-9][0-9]') #format of decimal number with two decimal places
+    while True:
+        pay = input("Enter the pay of the employee: $")
+        if r.match(pay):
+            break
+        else:
+            print('Invalid Option')
+
+    db.add_payroll(pay_type, pay, id)
 
 
-    x = input('Please enter the employee\'s ID: ')
-    choice = int(x)
-
-
-    db.add_payroll(pay_type, pay, emp_ID)
+def view_payroll():
+    emp_id = input('Enter the id of the employee: ')
+    db.view_payroll(emp_id)
 
 def edit_payroll():
-    pass
-    db.edit_payroll(pay_type, pay, emp_ID)
+    emp_id = input('Enter the id of the employee: ')
+    
+    print("1: Update pay type\n")
+    print("2: Update pay\n")
+
+    while True:    
+        choice = input("")
+
+        if choice is '1':
+            while True:
+                pay_type = input("Enter the new pay type (Hourly, Salary): ")
+                if pay_type in ['Hourly', 'Salary']:
+                    break
+                else:
+                    print('Invalid Option')
+
+        elif choice is '2':
+            r = re.compile('[1-9][0-9]*.[0-9][0-9]') #format of decimal number with two decimal places
+            while True:
+                pay = input("Enter the new pay of the employee: $")
+                if r.match(pay):
+                    break
+                else:
+                    print('Invalid Option')
+        else:
+            print('Invalid Option')
+            continue
+
+    db.edit_payroll(pay_type, pay, emp_id)
+
 
 def delete_payroll():
-    pass
-    db.delete_payroll(emp_ID)
+    emp_id = input('Enter the id of the employee whose payroll is to be deleted: ')
+    db.delete_payroll(emp_id)
 
 
 def main():
     #Greetings Dialogue
     print('Welcome to our program!!')
-
-    db = DatabaseManager()
 
     #Choosing an option
     while True: 
