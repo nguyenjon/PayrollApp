@@ -9,7 +9,7 @@ class DatabaseManager:
 
         try: #probe for db
             print('establishing connection to database')
-            self.conn = sqlite3.connect('file:' + self.db_name + '?mode=rw')
+            self.conn = sqlite3.connect(('file:' + self.db_name + '?mode=rw'))
             print('getting cursor')
             self.cursor = self.conn.cursor()
         except: # if no db, create it
@@ -71,79 +71,71 @@ class DatabaseManager:
         dob = input("Enter the date of birth of the employee in the format of YYYY-MM-DD(dashes included): ")
         email = input("Enter the email address of the employee: ")
         phoneNum = input("Enter the phone number of the employee: ")
-        Type = input("Enter the employee type(Manager, HR, CEO, etc.): ")
+        Type = input("Enter the employee type(employee, contractor): ")
         status = input("Enter the status of the employee: ")
-        try:
-            insert_employee = '''INSERT INTO Employee(First_Name, 
-                                                Last_Name, 
-                                                Date_of_Birth,
-                                                Email,
-                                                Phone_Num,
-                                                Type,
-                                                Status)
-                                 VALUES({0},{1},{2},{3},{4},{5},{6},{7},{8},)'''.format(firstName, lastName, dob, email, phoneNum, Type, status)
-            cursor.execute(insert_employee)
-        except:
-            print("ERROR: TABLE DOES NOT EXIST OR VALUES WERE FORMATTED INCORRECTLY\n")
+        #try:
+        insert_employee = '''INSERT INTO Employee(First_Name, 
+                                            Last_Name, 
+                                            Date_of_Birth,
+                                            Email,
+                                            Phone_Num,
+                                            Type,
+                                            Status)
+                                VALUES({0},{1},{2},{3},{4},{5},{6})'''.format(firstName, lastName, dob, email, phoneNum, Type, status)
+        self.cursor.execute(insert_employee)
+        #except:
+            #print("ERROR: TABLE DOES NOT EXIST OR VALUES WERE FORMATTED INCORRECTLY\n")
 
     def updateEmployee(self, empID):
-        print("1: Update employee ID\n")
-        print("2: Update name\n")
-        print("3: Update email\n")
-        print("4: Update phone number\n")
-        print("5: Update type\n")
-        print("6: Update status\n")
-        print("7: Update department\n")
+        print("1: Update name\n")
+        print("2: Update email\n")
+        print("3: Update phone number\n")
+        print("4: Update type\n")
+        print("5: Update status\n")
+        print("6: Update department\n")
         
         selection = input("")
         if selection == 1:
-            newEmployID = input("Enter the new ID of the employee you would like to update: ")
-            try: #updates id if record exists
-                update_id = "UPDATE Employee SET Employee_ID={0} WHERE Employee_ID={1}".format(newEmployID, empID)
-                cursor.execute(update_id)
-            except:#record does not exist
-                print("ERROR: EMPLOYEE WITH THE ID {} DOES NOT EXIST\n".format(empID))
-        elif selection == 2:
             newFirstName = input("Enter the new first name of the employee(if applicable): ")
             newLastName = input("Enter the new first name of the employee(if applicable): ")
             try: #updates name if record exists
                 update_name = "UPDATE Employee SET First_Name={0}, Last_Name{1} WHERE Employee_ID={2}".format(newFirstName, newLastName, empID)
-                cursor.execute(update_name)
+                self.cursor.execute(update_name)
             except:#record does not exist
                 print("ERROR: EMPLOYEE WITH THE ID {} DOES NOT EXIST\n".format(empID))
-        elif selection == 3:
+        elif selection == 2:
             newEmail = input("Enter the employee's new email address: ")
             try: #updates email if record exists
                 update_email = "UPDATE Employee SET Email={0} WHERE Employee_ID={1}".format(newEmail, empID)
-                cursor.execute(update_email)
+                self.cursor.execute(update_email)
             except:#record does not exist
                 print("ERROR: EMPLOYEE WITH THE ID {} DOES NOT EXIST\n".format(empID))
-        elif selection == 4:
+        elif selection == 3:
             newPhone = input("Please enter the new phone number of the employee: ")
             try: #updates phone number if record exists
                 update_phone = "UPDATE Employee SET Phone_Num={0} WHERE Employee_ID={1}".format(newPhone, empID)
-                cursor.execute(update_phone)
+                self.cursor.execute(update_phone)
             except:#record does not exist
                 print("ERROR: EMPLOYEE WITH THE ID {} DOES NOT EXIST\n".format(empID))
-        elif selection == 5:
+        elif selection == 4:
             newType = input("Please enter the new phone number of the employee: ")
             try: #updates type if record exists
                 update_type = "UPDATE Employee SET Type={0} WHERE Employee_ID={1}".format(newType, empID)
-                cursor.execute(update_type)
+                self.cursor.execute(update_type)
             except:#record does not exist
                 print("ERROR: EMPLOYEE WITH THE ID {} DOES NOT EXIST\n".format(empID))
-        elif selection == 6:
+        elif selection == 5:
             newStatus = input("Please enter the new status of the employee: ")
             try: #updates phone number if record exists
                 update_status = "UPDATE Employee SET Status={0} WHERE Employee_ID={1}".format(newStatus, empID)
-                cursor.execute(update_status)
+                self.cursor.execute(update_status)
             except:#record does not exist
                 print("ERROR: EMPLOYEE WITH THE ID {} DOES NOT EXIST\n".format(empID))
-        elif selection == 7:
+        elif selection == 6:
             newDept = input("Please enter the ID of the new department of the employee: ")
             try: #updates phone number if record exists
                 update_dept = "UPDATE Employee SET Dept_ID={0} WHERE Employee_ID={1}".format(newDept, empID)
-                cursor.execute(update_dept)
+                self.cursor.execute(update_dept)
             except:#record does not exist
                 print("ERROR: EMPLOYEE WITH THE ID {} DOES NOT EXIST\n".format(empID))
         else:
@@ -152,7 +144,7 @@ class DatabaseManager:
     def deleteEmployee(self, empID):
         try:
             delete_employee = '''DELETE FROM Employee WHERE Employee_ID={}'''.format(empID)
-            cursor.execute(delete_employee)
+            self.cursor.execute(delete_employee)
         except:
            print("ERROR: EMPLOYEE WITH THE ID {} DOES NOT EXIST\n".format(empID))
 
@@ -163,7 +155,7 @@ class DatabaseManager:
         try:
             add = '''INSERT INTO Payroll(Type, Pay, Employee_ID)
                         VALUES({0} , {1}, {2})'''.format(pay_type, pay, emp_ID)
-            cursor.execute(add)
+            self.cursor.execute(add)
         except:
             print('There was an error adding the payroll')
 
@@ -172,7 +164,7 @@ class DatabaseManager:
         try:
             view = '''SELECT pay_type, pay FROM Payroll
                         WHERE Employee_ID = {0}'''.format(emp_ID)
-            cursor.execute(view)
+            self.cursor.execute(view)
         except:
             print('ERROR: EMPLOYEE WITH THE ID {} DOES NOT HAVE A PAYROLL\n'.format(emp_ID))
 
@@ -183,7 +175,7 @@ class DatabaseManager:
                         SET Type = '{0}'
                             Pay = '{1}
                         WHERE Employee_ID = '{2}\''''.format(pay_type, pay, emp_ID)
-            cursor.execute(edit)
+            self.cursor.execute(edit)
         except:
             print('There was an error editing the payroll')
 
@@ -192,7 +184,7 @@ class DatabaseManager:
         try:
             delete = '''DELETE FROM Payroll 
                         WHERE Employee_ID={}'''.format(emp_ID)
-            cursor.execute(delete)
+            self.cursor.execute(delete)
         except:
            print("ERROR: EMPLOYEE WITH THE ID {} DOES NOT HAVE A PAYROLL\n".format(emp_ID))
 

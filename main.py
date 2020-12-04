@@ -29,10 +29,24 @@ def add_employee():
     pass
 
 def edit_employee():
-    pass
+    while True:
+        emp_id = input("Enter the ID of the employee: ")
+        if id.isnumeric():
+            break
+        else:
+            print('Invalid ID')
+    
+    db.updateEmployee(emp_id)
 
 def delete_employee():
-    pass
+    while True:
+        emp_id = input("Enter the ID of the employee: ")
+        if id.isnumeric():
+            break
+        else:
+            print('Invalid ID')
+
+    db.deleteEmployee(emp_id)
 
 
 #--------------------- Payroll operations-------------------------------------------------
@@ -64,11 +78,22 @@ def add_payroll():
 
 
 def view_payroll():
-    emp_id = input('Enter the id of the employee: ')
+    while True:
+        emp_id = input("Enter the ID of the employee: ")
+        if id.isnumeric():
+            break
+        else:
+            print('Invalid ID')
     db.view_payroll(emp_id)
 
+
 def edit_payroll():
-    emp_id = input('Enter the id of the employee: ')
+    while True:
+        emp_id = input("Enter the ID of the employee: ")
+        if id.isnumeric():
+            break
+        else:
+            print('Invalid ID')
     
     print("1: Update pay type\n")
     print("2: Update pay\n")
@@ -130,14 +155,17 @@ def main():
             # If Insert
             if choice == 1:
                 print("\nYou chose Insert.\n")
+                db.insertEmployee()
 
             # If Delete
             elif choice == 2:
                 print("\nYou chose Delete.\n")
+                delete_employee()
 
             # If Update
             elif choice == 3:
                 print("\nYou chose Update.\n")
+                edit_employee()
 
 
         #If Department
@@ -160,6 +188,7 @@ def main():
             elif choice == 3:
                 print('\nYou chose Update.\n')
 
+
         #If Payroll
         elif choice == 3:
             print('\nYou chose Payroll.\n')
@@ -176,12 +205,13 @@ def main():
             # If Delete
             elif choice == 2:
                 print('\nYou chose Delete.\n')
-                edit_payroll()
+                delete_payroll()
 
             # If Update
             elif choice == 3:
                 print('\nYou chose Update.\n')
-                delete_payroll()
+                edit_payroll()
+                
 
         else:
             break
