@@ -8,10 +8,12 @@ class DatabaseManager:
         self.cursor = None
 
         try: #probe for db
-            self.conn = sqlite3.connect(self.db_name + '?mode=rw')
-            self.cursor = conn.cursor()
+            print('establishing connection to database')
+            self.conn = sqlite3.connect('file:' + self.db_name + '?mode=rw')
+            print('getting cursor')
+            self.cursor = self.conn.cursor()
         except: # if no db, create it
-            # try: #create db
+            try: #create db
                 self.conn = sqlite3.connect(self.db_name)
                 self.cursor = self.conn.cursor()
 
@@ -45,9 +47,9 @@ class DatabaseManager:
                 print('creating payroll')
                 self.cursor.execute(create_payroll_table)
 
-            # except: #handle errors
-            #     print('There was an error creating the tables')
-        
+            except: #handle errors
+                print('There was an error creating the tables')
+
     #--------------------- Department operations-------------------------------------------------
 
     def add_department(self):
