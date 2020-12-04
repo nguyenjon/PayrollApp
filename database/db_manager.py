@@ -13,11 +13,6 @@ class DatabaseManager:
             print('getting cursor')
             self.cursor = self.conn.cursor()
 
-            create_department_table = '''CREATE TABLE IF NOT EXISTS Department(
-                                            Dept_ID INT PRIMARY KEY UNIQUE NOT NULL,
-                                            Name VARCHAR(255), 
-                                            Location VARCHAR(255))'''
-
             create_employee_table = '''CREATE TABLE IF NOT EXISTS Employee(
                                             Employee_ID INT PRIMARY KEY UNIQUE NOT NULL,
                                             First_Name VARCHAR(255) NOT NULL, 
@@ -45,19 +40,6 @@ class DatabaseManager:
 
         except: #handle errors
             print('There was an error creating the tables')
-
-    #--------------------- Department operations-------------------------------------------------
-
-    def add_department(self):
-        
-        #"INSERT INTO Department(Dept_ID) VALUES (" + i +")";
-        pass
-
-    def edit_department(self):
-        pass
-
-    def delete_department(self):
-        pass
 
     #--------------------- Employee operations-------------------------------------------------
 

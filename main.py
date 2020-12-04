@@ -10,19 +10,6 @@ from database.db_manager import DatabaseManager
 
 db = DatabaseManager()
 
-#--------------------- Department operations-------------------------------------------------
-
-def add_department():
-    
-    #"INSERT INTO Department(Dept_ID) VALUES (" + i +")";
-    pass
-
-def edit_department():
-    pass
-
-def delete_department():
-    pass
-
 #--------------------- Employee operations-------------------------------------------------
 
 def add_employee():
@@ -135,14 +122,14 @@ def main():
 
     #Choosing an option
     while True: 
-        x = input('Please enter a number: 1(Employee), 2(Department), 3(Payroll), any other number(Quit)')
+        x = input('Please enter a number: 1(Employee), 2(Payroll), any other number(Quit)')
         if x.isnumeric():
             break
         else:
             print('Not a valid option')
     choice = int(x)
 
-    while(choice in [1, 2, 3]) :
+    while(choice in [1, 2]) :
         
         #If Employee
         if choice == 1:
@@ -167,30 +154,8 @@ def main():
                 print("\nYou chose Update.\n")
                 edit_employee()
 
-
-        #If Department
-        elif choice == 2:
-            print('\nYou chose Department.\n')
-
-            #Choosing an operation
-            y = input('Please enter a number to select an operation: 1(Insert), 2(Delete), or 3(Update) ')
-            choice = int(y)
-
-            #If Insert
-            if choice == 1:
-                print('\nYou chose Insert.\n')
-
-            #If Delete
-            elif choice == 2:
-                print('\nYou chose Delete.\n')
-
-            #If Update
-            elif choice == 3:
-                print('\nYou chose Update.\n')
-
-
         #If Payroll
-        elif choice == 3:
+        elif choice == 2:
             print('\nYou chose Payroll.\n')
 
             # Choosing an operation
@@ -217,7 +182,7 @@ def main():
             break
 
         while True: 
-            x = input('Please enter a number: 1(Employee), 2(Department), 3(Payroll), any other number(Quit)')
+            x = input('Please enter a number: 1(Employee), 2(Payroll), any other number(Quit)')
             if x.isnumeric():
                 break
             else:
