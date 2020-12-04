@@ -33,24 +33,25 @@ def delete_employee():
 
 #--------------------- Payroll operations-------------------------------------------------
 
-# def add_payroll():
-#     x = input('Please enter a pay type: 1(hourly), 2(salary)')
-#     choice = int(x)
+def add_payroll():
+    pass
+    x = input('Please enter a pay type: 1(hourly), 2(salary)')
+    choice = int(x)
 
 
-#     x = input('Please enter the employee\'s ID: ')
-#     choice = int(x)
+    x = input('Please enter the employee\'s ID: ')
+    choice = int(x)
 
 
-#     db.add_payroll(pay_type, pay, emp_ID)
+    db.add_payroll(pay_type, pay, emp_ID)
 
-# def edit_payroll():
+def edit_payroll():
+    pass
+    db.edit_payroll(pay_type, pay, emp_ID)
 
-#     db.edit_payroll(pay_type, pay, emp_ID)
-
-# def delete_payroll():
-
-#     db.delete_payroll(emp_ID)
+def delete_payroll():
+    pass
+    db.delete_payroll(emp_ID)
 
 
 def main():
@@ -60,10 +61,16 @@ def main():
     db = DatabaseManager()
 
     #Choosing an option
-    x = input('Please enter a number: 1(Employee), 2(Department), 3(Payroll), 4(Quit)')
+    while True: 
+        x = input('Please enter a number: 1(Employee), 2(Department), 3(Payroll), any other number(Quit)')
+        if x.isnumeric():
+            break
+        else:
+            print('Not a valid option')
     choice = int(x)
 
-    while(choice not in [1, 2, 3]) :
+    while(choice in [1, 2, 3]) :
+        
         #If Employee
         if choice == 1:
             print("\nYou chose Employee.\n")
@@ -129,11 +136,17 @@ def main():
                 delete_payroll()
 
         else:
-            print('\nEnding program.\n')
-            exit()
+            break
 
-        x = input('Please enter a number: 1(Employee), 2(Department), 3(Payroll), 4(Quit)')
+        while True: 
+            x = input('Please enter a number: 1(Employee), 2(Department), 3(Payroll), any other number(Quit)')
+            if x.isnumeric():
+                break
+            else:
+                print('Not a valid option')
         choice = int(x)
+
+    print('Ending Program')
 
 if __name__ == '__main__':
     main()
