@@ -61,13 +61,13 @@ def add_payroll():
         else:
             print('Invalid Option')
 
-    db.add_payroll(pay_type, pay, id)
+    db.add_payroll(id, pay_type, pay, id)
 
 
 def view_payroll():
     while True:
         emp_id = input("Enter the ID of the employee: ")
-        if id.isnumeric():
+        if emp_id.isnumeric():
             break
         else:
             print('Invalid ID')
@@ -136,8 +136,13 @@ def main():
             print("\nYou chose Employee.\n")
 
             # Choosing an operation
-            y = input("Please enter a number to select an operation: 1(Insert), 2(Delete), or 3(Update) ")
-            choice = int(y)
+            while True: 
+                x = input('Please enter a number to select an operation: 1(Insert), 2(Delete), or 3(Update)')
+                if x.isnumeric():
+                    break
+                else:
+                    print('Not a valid option')
+            choice = int(x)
 
             # If Insert
             if choice == 1:
@@ -159,8 +164,13 @@ def main():
             print('\nYou chose Payroll.\n')
 
             # Choosing an operation
-            y = input('Please enter a number to select an operation: 1(Insert), 2(Delete), or 3(Update) ')
-            choice = int(y)
+            while True: 
+                x = input('Please enter a number to select an operation: 1(Insert), 2(View), 3(Delete), or 4(Update)')
+                if x.isnumeric():
+                    break
+                else:
+                    print('Not a valid option')
+            choice = int(x)
 
             # If Insert
             if choice == 1:
@@ -169,6 +179,10 @@ def main():
 
             # If Delete
             elif choice == 2:
+                print('\nYou chose View.\n')
+                view_payroll()
+
+            elif choice == 3:   
                 print('\nYou chose Delete.\n')
                 delete_payroll()
 

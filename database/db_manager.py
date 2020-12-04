@@ -8,9 +8,7 @@ class DatabaseManager:
         self.cursor = None
 
         try: #probe for db
-            print('establishing connection to database')
             self.conn = sqlite3.connect(self.db_name)
-            print('getting cursor')
             self.cursor = self.conn.cursor()
 
             create_employee_table = '''CREATE TABLE IF NOT EXISTS Employee(
@@ -21,10 +19,7 @@ class DatabaseManager:
                                             Email VARCHAR(255),
                                             Phone_Num VARCHAR(255),
                                             Type VARCHAR(255),
-                                            Status VARCHAR(255),
-                                            Dept_ID INT, 
-                                            
-                                            FOREIGN KEY(Dept_ID) REFERENCES Department(Dept_ID))'''
+                                            Status VARCHAR(255))'''
 
             create_payroll_table = '''CREATE TABLE IF NOT EXISTS Payroll(
                                             Payroll_ID INT PRIMARY KEY UNIQUE NOT NULL,
@@ -34,7 +29,6 @@ class DatabaseManager:
                                             
                                             FOREIGN KEY(Employee_ID) REFERENCES Employee(Employee_ID))'''
             
-            self.cursor.execute(create_department_table)
             self.cursor.execute(create_employee_table)
             self.cursor.execute(create_payroll_table)
 
@@ -152,8 +146,8 @@ class DatabaseManager:
     def edit_payroll(self, pay_type, pay, emp_ID):
         try:
             edit = '''UPDATE Payroll
-                        SET Type = '{0}'
-                            Pay = '{1}
+                        SET Type = "{0}"
+                            Pay = {1}
                         WHERE Employee_ID = '{2}\''''.format(pay_type, pay, emp_ID)
             self.cursor.execute(edit)
         except:
