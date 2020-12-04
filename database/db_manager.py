@@ -11,47 +11,45 @@ class DatabaseManager:
             self.conn = sqlite3.connect(self.db_name + '?mode=rw')
             self.cursor = conn.cursor()
         except: # if no db, create it
-            self.conn = sqlite3.connect(self.db_name)
-            self.cursor = conn.cursor()
+            try: #create db
+                self.conn = sqlite3.connect(self.db_name)
+                self.cursor = conn.cursor()
 
-            create_department_table = '''CREATE TABLE Department(
-                                            Dept_ID INT NOT NULL UNIQUE, 
-                                            Name VARCHAR(255), 
-	                                        Location VARCHAR(255),
+                create_department_table = '''CREATE TABLE Department(
+                                                Name VARCHAR(255), 
+                                                Location VARCHAR(255))'''
 
-                                            PRIMARY KEY(Dept_ID))'''
+                create_employee_table = '''CREATE TABLE Employee(
+                                                First_Name VARCHAR(255) NOT NULL, 
+                                                Last_Name VARCHAR(255), 
+                                                Date_of_Birth DATE NOT NULL,
+                                                Email VARCHAR(255),
+                                                Phone_Num VARCHAR(255),
+                                                Dept_ID VARCHAR(255), 
+                                                Type VARCHAR(255),
+                                                Status VARCHAR(255),
+                                                Dept_ID INT, 
 
-            create_employee_table = '''CREATE TABLE Employee(
-                                            Employee_ID INT NOT NULL UNIQUE, 
-                                            First_Name VARCHAR(255) NOT NULL, 
-                                            Last_Name VARCHAR(255), 
-                                            Date_of_Birth DATE NOT NULL,
-                                            Email VARCHAR(255),
-                                            Phone_Num VARCHAR(255),
-                                            Dept_ID VARCHAR(255), 
-                                            Type VARCHAR(255),
-                                            Status VARCHAR(255),
-                                            Dept_ID INT, 
+                                                FOREIGN KEY(Dept_ID) REFERENCES Department(Dept_ID))'''
 
-                                            PRIMARY KEY(Employee_ID), 
-                                            FOREIGN KEY(Dept_ID) REFERENCES Department(Dept_ID))'''
+                create_payroll_table = '''CREATE TABLE Payroll(
+                                                Type VARCHAR(255),
+                                                Pay DECIMAL(10,2), 
+                                                Employee_ID INT, 
 
-            create_payroll_table = '''CREATE TABLE Payroll(
-                                            Payroll_ID INT NOT NULL UNIQUE, 
-                                            Type VARCHAR(255),
-                                            Pay DECIMAL(10,2), 
-                                            Employee_ID INT, 
+                                                FOREIGN KEY(Employee_ID) REFERENCES Employee(Employee_ID))'''
 
-                                            PRIMARY KEY(Payroll_ID), 
-                                            FOREIGN KEY(Employee_ID) REFERENCES Employee(Employee_ID))''';
+                cursor.execute(create_department_table)
+                cursor.execute(create_employee_table)
+                cursor.execute(create_payroll_table)
 
-            cursor.execute(create_department_table)
-            cursor.execute(create_employee_table)
-            cursor.execute(create_payroll_table)
+            except: #handle errors
+                print('There was an error creating the tables')
         
     #--------------------- Department operations-------------------------------------------------
 
     def add_department(self):
+        
         #"INSERT INTO Department(Dept_ID) VALUES (" + i +")";
         pass
 
@@ -75,14 +73,31 @@ class DatabaseManager:
 
     #--------------------- Payroll operations-------------------------------------------------
 
-    def add_payroll(self):
-        pass
+    def add_payroll(self, pay_type, pay, emp_ID):
+        try:
+            add = '''INSERT INTO Payroll(Type, Pay, Employee_ID)
+                        VALUES({0} , {1}, {2})'''.format(pay_type, pay, emp_ID)
+            cursor.execute(add)
+        except:
+            print('There was an error adding the payroll')
 
-    def edit_payroll(self):
-        pass
+    def edit_payroll(self, pay_type, pay, emp_ID):
+        try:
+            edit = '''UPDATE Payroll
+                        SET Type = '{0}'
+                            Pay = '{1}
+                        WHERE Employee_ID = '{2}\''''.format(pay_type, pay, emp_ID)
+            cursor.execute(edit)
+        except:
+            print('There was an error editing the payroll')
 
-    def delete_payroll(self):
-        pass
+    def delete_payroll(self, emp_ID):
+        try:
+            delete = '''DEELETE from Payroll
+                            WHERE Employee_ID = '{0}\''''.format(emp_ID)
+            cursor.execute(delete)
+        except:
+            print('There was an error adding the payroll')
 
 
 
