@@ -39,11 +39,8 @@ class DatabaseManager:
                                             
                                             FOREIGN KEY(Employee_ID) REFERENCES Employee(Employee_ID))'''
             
-            print('creating department')
             self.cursor.execute(create_department_table)
-            print('creating employee')
             self.cursor.execute(create_employee_table)
-            print('creating payroll')
             self.cursor.execute(create_payroll_table)
 
         except: #handle errors
@@ -73,19 +70,19 @@ class DatabaseManager:
         phoneNum = input("Enter the phone number of the employee: ")
         Type = input("Enter the employee type(employee, contractor): ")
         status = input("Enter the status of the employee: ")
-        #try:
-        insert_employee = '''INSERT INTO Employee(Employee_ID,
-                                            First_Name, 
-                                            Last_Name, 
-                                            Date_of_Birth,
-                                            Email,
-                                            Phone_Num,
-                                            Type,
-                                            Status)
-                                VALUES({0}, "{1}","{2}",{3},"{4}","{5}","{6}","{7}")'''.format(emp_ID, firstName, lastName, dob, email, phoneNum, Type, status)
-        self.cursor.execute(insert_employee)
-        #except:
-            #print("ERROR: TABLE DOES NOT EXIST OR VALUES WERE FORMATTED INCORRECTLY\n")
+        try:
+            insert_employee = '''INSERT INTO Employee(Employee_ID,
+                                                First_Name, 
+                                                Last_Name, 
+                                                Date_of_Birth,
+                                                Email,
+                                                Phone_Num,
+                                                Type,
+                                                Status)
+                                    VALUES({0}, "{1}","{2}",{3},"{4}","{5}","{6}","{7}")'''.format(emp_ID, firstName, lastName, dob, email, phoneNum, Type, status)
+            self.cursor.execute(insert_employee)
+        except:
+            print("ERROR: TABLE DOES NOT EXIST OR VALUES WERE FORMATTED INCORRECTLY\n")
 
     def updateEmployee(self, empID):        
         print("1: Update name\n")
@@ -188,9 +185,6 @@ class DatabaseManager:
             self.cursor.execute(delete)
         except:
            print("ERROR: EMPLOYEE WITH THE ID {} DOES NOT HAVE A PAYROLL\n".format(emp_ID))
-
-    #--------------------- Payroll-Employee operations-------------------------------------------------
-
 
 
     # sqlStatements = "CREATE TABLE Payslip(Payslip_ID INT NOT NULL UNIQUE, Deductions DECIMAL(10,2) NOT NULL, Hours DECIMAL(5,2) NOT NULL, Payroll_ID INT, Net_Pay DECIMAL(10,2) NOT NULL, Gross_Pay DECIMAL(10,2) NOT NULL, Start_Date DATE NOT NULL NOT NULL, End_Date DATE NOT NULL NOT NULL, PRIMARY KEY(Payslip_ID), FOREIGN KEY(Payroll_ID) REFERENCES Payroll(Payroll_ID))";
